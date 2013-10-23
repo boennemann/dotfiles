@@ -1,0 +1,2 @@
+export PATH="/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/git/bin:"
+export PATH=${PATH}:/Users/boennemann/Documents/android-sdk-macosx/platform-tools:/Users/boennemann/Documents/android-sdk-macosx/tools
