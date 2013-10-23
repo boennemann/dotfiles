@@ -1,0 +1,23 @@
+GIT_AUTHOR_NAME="Stephan Bönnemann"
+GIT_COMMITTER_NAME="$GIT_AUTHOR_NAME"
+git config --global user.name "$GIT_AUTHOR_NAME"
+GIT_AUTHOR_EMAIL="stephan@boennemann.me"
+GIT_COMMITTER_EMAIL="$GIT_AUTHOR_EMAIL"
+git config --global user.email "$GIT_AUTHOR_EMAIL"
+
+git config --global alias.lg "log --color --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)%Creset' --abbrev-commit"
+git config --global alias.co "checkout"
+
+git config --global credential.helper osxkeychain
+git config --global rebase.autosquash true
+git config --global core.editor "subl -n -w"
+git config --global help.autocorrect 1
+
+alias poopin='/System/Library/CoreServices/"Menu Extras"/User.menu/Contents/Resources/CGSession -suspend'
+alias gdm='git branch --merged | grep -v "\*" | xargs -n 1 git branch -d'
+
+export PATH="/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/git/bin:"
+export PATH=${PATH}:/Users/boennemann/Documents/android-sdk-macosx/platform-tools:/Users/boennemann/Documents/android-sdk-macosx/tools
+
+[[ -s /Users/boennemann/.nvm/nvm.sh ]] && . /Users/boennemann/.nvm/nvm.sh # This loads NVM
+nvm use 0.10
