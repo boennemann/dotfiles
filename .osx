@@ -435,7 +435,7 @@ defaults write NSGlobalDomain WebKitDeveloperExtras -bool true
 # To use these commands in another language, browse iTunes’s package contents,
 # open `Contents/Resources/your-language.lproj/Localizable.strings`, and look
 # for `kHiddenMenuItemTargetSearch`.
-# defaults write com.apple.iTunes NSUserKeyEquivalents -dict-add "Target Search Field" "@F"
+# defaults write com.apple.iTunes NSUserKeyEquivalents -dict-add "Target Search Field" -string "@F"
 
 ###############################################################################
 # Mail                                                                        #
@@ -449,7 +449,7 @@ defaults write com.apple.mail DisableSendAnimations -bool true
 defaults write com.apple.mail AddressesIncludeNameOnPasteboard -bool false
 
 # Add the keyboard shortcut ⌘ + Enter to send an email in Mail.app
-defaults write com.apple.mail NSUserKeyEquivalents -dict-add "Send" "@\\U21a9"
+defaults write com.apple.mail NSUserKeyEquivalents -dict-add "Send" -string "@\\U21a9"
 
 ###############################################################################
 # Spotlight                                                                   #
@@ -548,6 +548,13 @@ defaults write com.apple.appstore WebKitDeveloperExtras -bool true
 defaults write com.apple.appstore ShowDebugMenu -bool true
 
 ###############################################################################
+# Messages                                                                    #
+###############################################################################
+
+# Disable automatic emoji substitution (i.e. use plain text smileys)
+# defaults write com.apple.messageshelper.MessageController SOInputLineSettings -dict-add "automaticEmojiSubstitutionEnablediMessage" -bool false
+
+###############################################################################
 # Google Chrome & Google Chrome Canary                                        #
 ###############################################################################
 
@@ -621,8 +628,8 @@ defaults write ~/Library/Preferences/org.gpgtools.gpgmail SignNewEmailsByDefault
 ###############################################################################
 
 for app in "Address Book" "Calendar" "Contacts" "Dashboard" "Dock" "Finder" \
-	"Mail" "Safari" "SizeUp" "SystemUIServer" "Terminal" "Transmission" \
-	"Twitter" "iCal" "iTunes"; do
+	"Mail" "Messages" "Safari" "SizeUp" "SystemUIServer" "Terminal" \
+	"Transmission" "Twitter" "iCal" "iTunes"; do
 	killall "$app" > /dev/null 2>&1
 done
 echo "Done. Note that some of these changes require a logout/restart to take effect."
