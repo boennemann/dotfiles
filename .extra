@@ -13,10 +13,6 @@ git config --global rebase.autosquash true
 git config --global core.editor "subl -n -w"
 git config --global help.autocorrect 1
 
-alias gdm='git branch --merged | grep -v "\*" | xargs -n 1 git branch -d'
-
-alias poopin='/System/Library/CoreServices/"Menu Extras"/User.menu/Contents/Resources/CGSession -suspend'
-
 # Autocomplete Grunt commands
 which grunt > /dev/null && eval "$(grunt --completion=bash)"
 # If possible, add tab completion for many more commands
