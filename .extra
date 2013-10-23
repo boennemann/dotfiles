@@ -13,11 +13,18 @@ git config --global rebase.autosquash true
 git config --global core.editor "subl -n -w"
 git config --global help.autocorrect 1
 
-alias poopin='/System/Library/CoreServices/"Menu Extras"/User.menu/Contents/Resources/CGSession -suspend'
 alias gdm='git branch --merged | grep -v "\*" | xargs -n 1 git branch -d'
+
+alias poopin='/System/Library/CoreServices/"Menu Extras"/User.menu/Contents/Resources/CGSession -suspend'
+
+# Autocomplete Grunt commands
+which grunt > /dev/null && eval "$(grunt --completion=bash)"
+# If possible, add tab completion for many more commands
+[ -f /etc/bash_completion ] && source /etc/bash_completion
 
 export PATH="/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/git/bin:"
 export PATH=${PATH}:/Users/boennemann/Documents/android-sdk-macosx/platform-tools:/Users/boennemann/Documents/android-sdk-macosx/tools
 
 [[ -s /Users/boennemann/.nvm/nvm.sh ]] && . /Users/boennemann/.nvm/nvm.sh # This loads NVM
 nvm use 0.10
+[[ -s "$HOME/.rvm/scripts/rvm" ]] && source "$HOME/.rvm/scripts/rvm" # Load RVM into a shell session *as a function*
