@@ -23,3 +23,5 @@ export GREP_OPTIONS="--color=auto"
 
 # Link Homebrew casks in `/Applications` rather than `~/Applications`
 export HOMEBREW_CASK_OPTS="--appdir=/Applications"
+
+export NODE_PATH="/Users/boennemann/.nvm/v0.10.29/lib/node_modules"
