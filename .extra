@@ -10,13 +10,10 @@ git config --global alias.co "checkout"
 
 git config --global credential.helper osxkeychain
 git config --global rebase.autosquash true
-git config --global core.editor "subl -n -w"
+git config --global core.editor "atom --wait"
 git config --global help.autocorrect 1
 
-# Autocomplete Grunt commands
-which grunt > /dev/null && eval "$(grunt --completion=bash)"
-# If possible, add tab completion for many more commands
-[ -f /etc/bash_completion ] && source /etc/bash_completion
+export ANDROID_HOME=/Applications/android-sdk-macosx/
 
 [[ -s "$HOME/.nvm/nvm.sh" ]] && . "$HOME/.nvm/nvm.sh" # This loads NVM
 nvm use default

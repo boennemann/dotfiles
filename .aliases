@@ -17,6 +17,7 @@ alias g="git"
 alias n="npm"
 alias h="history"
 alias j="jobs"
+alias subl="atom"
 
 # Detect which `ls` flavor is in use
 if ls --color > /dev/null 2>&1; then # GNU `ls`
