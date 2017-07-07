@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 # Make vim the default editor.
-export EDITOR='vim';
+export EDITOR='atom';
 
 # Enable persistent REPL history for `node`.
 export NODE_REPL_HISTORY=~/.node_history;
@@ -28,8 +28,6 @@ export LESS_TERMCAP_md="${yellow}";
 
 # Link Homebrew casks in `/Applications` rather than `~/Applications`
 export HOMEBREW_CASK_OPTS="--appdir=/Applications"
-
-export NODE_PATH="/Users/boennemann/.nvm/v0.10.29/lib/node_modules";
 
 # Don’t clear the screen after quitting a manual page.
 export MANPAGER='less -X';

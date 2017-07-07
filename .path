@@ -3,3 +3,4 @@ export PATH=${PATH}:/Applications/android-sdk-macosx/tools
 export PATH=${PATH}:/Applications/android-sdk-macosx/platform-tools
 export PATH="/Applications/Postgres.app/Contents/Versions/9.4/bin:$PATH:$PATH"
 export PATH="/usr/local/texlive/2014basic/bin/x86_64-darwin:$PATH:$PATH"
+export PATH="/usr/local/sbin:$PATH"
