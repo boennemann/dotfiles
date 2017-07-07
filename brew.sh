@@ -6,7 +6,7 @@
 brew update
 
 # Upgrade any already-installed formulae.
-brew upgrade --all
+brew upgrade
 
 # Install GNU core utilities (those that come with macOS are outdated).
 # Don’t forget to add `$(brew --prefix coreutils)/libexec/gnubin` to `$PATH`.
@@ -20,7 +20,7 @@ brew install findutils
 brew install gnu-sed --with-default-names
 # Install Bash 4.
 # Note: don’t forget to add `/usr/local/bin/bash` to `/etc/shells` before
-# running `chsh`.
+# running `chsh`. To do so, run `sudo chsh -s /usr/local/bin/bash`.
 brew install bash
 brew tap homebrew/versions
 brew install bash-completion2
@@ -41,7 +41,7 @@ brew install ringojs
 brew install narwhal
 
 # Install more recent versions of some macOS tools.
-brew install vim --override-system-vi
+brew install vim --with-override-system-vi
 brew install homebrew/dupes/grep
 brew install homebrew/dupes/openssh
 brew install homebrew/dupes/screen

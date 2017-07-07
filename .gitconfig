@@ -29,6 +29,9 @@
 	branches = branch -a
 	remotes = remote -v
 
+	# List aliases
+	aliases = config --get-regexp alias
+
 	# Amend the currently staged files to the latest commit
 	amend = commit --amend --reuse-message=HEAD
 
@@ -134,6 +137,9 @@
 
 	# Detect copies as well as renames
 	renames = copies
+	# Enable an experimental heuristic that shifts the hunk boundary in an
+	# attempt to make the resulting patch easier to read.
+	indentHeuristic = true
 
 [diff "bin"]
 
