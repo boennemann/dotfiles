@@ -10,11 +10,9 @@ git config --global alias.co "checkout"
 
 git config --global credential.helper osxkeychain
 git config --global rebase.autosquash true
-git config --global core.editor "atom --wait"
+git config --global core.editor "code --wait"
 git config --global help.autocorrect 1
 
-export ANDROID_HOME=/Applications/android-sdk-macosx/
-
-[[ -s "$HOME/.nvm/nvm.sh" ]] && . "$HOME/.nvm/nvm.sh" # This loads NVM
-nvm use default
+# [[ -s "$HOME/.nvm/nvm.sh" ]] && . "$HOME/.nvm/nvm.sh" # This loads NVM
+# nvm use default
 [[ -s "$HOME/.rvm/scripts/rvm" ]] && source "$HOME/.rvm/scripts/rvm" # Load RVM into a shell session *as a function*

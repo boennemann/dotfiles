@@ -47,11 +47,12 @@ complete -W "NSGlobalDomain" defaults;
 # Add `killall` tab completion for common apps
 complete -o "nospace" -W "Contacts Calendar Dock Finder Mail Safari iTunes SystemUIServer Terminal Twitter" killall;
 
-_direnv_hook() {
-  local previous_exit_status=$?;
-  eval "$(direnv export bash)";
-  return $previous_exit_status;
-};
-if ! [[ "$PROMPT_COMMAND" =~ _direnv_hook ]]; then
-  PROMPT_COMMAND="_direnv_hook;$PROMPT_COMMAND";
-fi
+# _direnv_hook() {
+#   local previous_exit_status=$?;
+#   eval "$(direnv export bash)";
+#   return $previous_exit_status;
+# };
+
+# if ! [[ "$PROMPT_COMMAND" =~ _direnv_hook ]]; then
+#   PROMPT_COMMAND="_direnv_hook;$PROMPT_COMMAND";
+# fi

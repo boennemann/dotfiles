@@ -139,8 +139,13 @@
 
 [diff]
 
+	tool = default-difftool
 	# Detect copies as well as renames
 	renames = copies
+
+[difftool "default-difftool"]
+
+	cmd = code --wait --diff $LOCAL $REMOTE
 
 [diff "bin"]
 
