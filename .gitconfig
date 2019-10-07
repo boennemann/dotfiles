@@ -190,3 +190,6 @@
 [url "git://gist.github.com/"]
 
 	insteadOf = "gist:"
+
+[includeIf "gitdir:~/Projects/infinitec"]
+  path = .gitconfig-infinitec
