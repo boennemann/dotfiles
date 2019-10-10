@@ -79,6 +79,9 @@
 		fi \
 	}; f"
 
+	lg = "log --color --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)%Creset' --abbrev-commit"
+	co = "checkout"
+
 [apply]
 
 	# Detect whitespace errors when applying a patch
@@ -106,6 +109,8 @@
 	# Speed up commands involving untracked files such as `git status`.
 	# https://git-scm.com/docs/git-update-index#_untracked_cache
 	untrackedCache = true
+
+	editor = code --wait
 
 [color]
 
@@ -191,5 +196,17 @@
 
 	insteadOf = "gist:"
 
-[includeIf "gitdir:~/Projects/infinitec"]
-  path = .gitconfig-infinitec
+[user]
+	name = "Stephan Bönnemann-Walenta"
+
+[credential]
+	helper = osxkeychain
+
+[rebase]
+	autosquash = true
+
+[includeIf "gitdir:~/"]
+	path = .gitconfig-personal
+
+[includeIf "gitdir:infinitec/"]
+	path = .gitconfig-finleap

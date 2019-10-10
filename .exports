@@ -38,3 +38,5 @@ export GPG_TTY=$(tty);
 
 export ANDROID_SDK_ROOT="/Users/boennemann/Library/Android/sdk"
 export ANDROID_HOME="/Users/boennemann/Library/Android/sdk"
+
+export BASH_SILENCE_DEPRECATION_WARNING=1
