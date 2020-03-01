@@ -210,5 +210,5 @@
 [includeIf "gitdir:~/"]
 	path = .gitconfig-personal
 
-[includeIf "gitdir:infinitec/"]
+[includeIf "gitdir:finleap/"]
 	path = .gitconfig-finleap
