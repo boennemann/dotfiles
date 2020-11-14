@@ -211,5 +211,5 @@
 [includeIf "gitdir:~/"]
 	path = .gitconfig-personal
 
-[includeIf "gitdir:finleap/"]
-	path = .gitconfig-finleap
+[includeIf "gitdir:prosperity/"]
+	path = .gitconfig-prosperity
