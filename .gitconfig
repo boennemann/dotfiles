@@ -203,3 +203,15 @@
 
 [includeIf "gitdir:prosperity/"]
 	path = .gitconfig-prosperity
+
+[user]
+  signingkey = ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCuJOsIXo54j4RZf+48gOgxv45VuOs7PG7c/eTXpT583z/4bsYIous8yv2BZnpvBieZaOLTc8UC/aurgKv2o/5W7PSuZhnui3Wit6g00veGy4tR4+rTQ4myF/AeSez4vQyDhm8FT/H9miK1DXc2JIDIGhgo7A/sKn+TXEJfy5YUtiEmQmcsgG6gHkeCNUtUoQau9qxj8INgZQmhgjGpdokcWXbKjIDxfrRcrcc7wp6zPqhyWTFyEriUu/LhAyE44lCbOO94qwTeuPEadpajdUDcKcYkZj+mdXd7Pqp/+ytaQ0zI01KrMpbDCulK38LLAmFjnFfUg4tMQ3sWhxzN399r
+
+[gpg]
+  format = ssh
+
+[gpg "ssh"]
+  program = "/Applications/1Password.app/Contents/MacOS/op-ssh-sign"
+
+[commit]
+  gpgsign = true
