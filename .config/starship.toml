@@ -1,7 +1,9 @@
-# Starship prompt config — Solarized Dark friendly
+# Starship prompt — matching old .bash_prompt on Solarized Dark
+# "sbw at Mac in ~/path on branch [$]"
 
-# Prompt format
 format = """
+$username\
+$hostname\
 $directory\
 $git_branch\
 $git_status\
@@ -13,43 +15,51 @@ $cmd_duration\
 $line_break\
 $character"""
 
-# Directory
+[username]
+show_always = true
+format = "[$user]($style) "
+style_user = "bold #cb4b16"
+style_root = "bold red"
+
+[hostname]
+ssh_only = false
+format = "[at](bold white) [$hostname]($style) [in](bold white) "
+style = "bold #b58900"
+
 [directory]
 truncation_length = 5
 truncate_to_repo = false
+style = "bold #859900"
+format = "[$path]($style)[$read_only]($read_only_style) "
 
-# Git
 [git_branch]
-format = " on [$branch]($style) "
-style = "bold purple"
+format = "[on](bold white) [$branch]($style) "
+style = "bold #6c71c4"
 
 [git_status]
-format = '([$all_status$ahead_behind]($style) )'
-style = "bold blue"
+format = '([$all_status$ahead_behind]($style))'
+style = "bold #268bd2"
 
-# Languages — only show when relevant files detected
 [nodejs]
-format = "[$symbol($version)]($style) "
+format = " [$symbol($version)]($style)"
 symbol = "node "
 
 [golang]
-format = "[$symbol($version)]($style) "
+format = " [$symbol($version)]($style)"
 symbol = "go "
 
 [ruby]
-format = "[$symbol($version)]($style) "
+format = " [$symbol($version)]($style)"
 symbol = "rb "
 
 [python]
-format = "[$symbol($version)]($style) "
+format = " [$symbol($version)]($style)"
 symbol = "py "
 
-# Command duration — show if > 2 seconds
 [cmd_duration]
 min_time = 2_000
-format = "took [$duration]($style) "
+format = " took [$duration]($style)"
 
-# Prompt character
 [character]
-success_symbol = "[\\$](bold white)"
+success_symbol = "[\\$](bold #fdf6e3)"
 error_symbol = "[\\$](bold red)"

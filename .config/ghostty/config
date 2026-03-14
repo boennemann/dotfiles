@@ -1,0 +1,15 @@
+# Shell - use bash (matching iTerm2 config)
+command = /opt/homebrew/bin/bash
+
+# Font - JetBrains Mono 13 (matching iTerm2)
+font-family = JetBrains Mono
+font-size = 13
+
+# Color scheme - Solarized Dark
+theme = Solarized Dark
+
+# Scrollback - large buffer (iTerm2 had unlimited)
+scrollback-limit = 10000000
+
+# Option key sends normal characters (matching iTerm2)
+macos-option-as-alt = false
