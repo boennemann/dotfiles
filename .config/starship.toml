@@ -1,0 +1,55 @@
+# Starship prompt config — Solarized Dark friendly
+
+# Prompt format
+format = """
+$directory\
+$git_branch\
+$git_status\
+$nodejs\
+$golang\
+$ruby\
+$python\
+$cmd_duration\
+$line_break\
+$character"""
+
+# Directory
+[directory]
+truncation_length = 5
+truncate_to_repo = false
+
+# Git
+[git_branch]
+format = " on [$branch]($style) "
+style = "bold purple"
+
+[git_status]
+format = '([$all_status$ahead_behind]($style) )'
+style = "bold blue"
+
+# Languages — only show when relevant files detected
+[nodejs]
+format = "[$symbol($version)]($style) "
+symbol = "node "
+
+[golang]
+format = "[$symbol($version)]($style) "
+symbol = "go "
+
+[ruby]
+format = "[$symbol($version)]($style) "
+symbol = "rb "
+
+[python]
+format = "[$symbol($version)]($style) "
+symbol = "py "
+
+# Command duration — show if > 2 seconds
+[cmd_duration]
+min_time = 2_000
+format = "took [$duration]($style) "
+
+# Prompt character
+[character]
+success_symbol = "[\\$](bold white)"
+error_symbol = "[\\$](bold red)"

@@ -65,6 +65,8 @@
 
 	# Show the user email for the current repository.
 	whoami = config user.email
+	sw = switch
+	sw- = switch -
 
 [apply]
 
@@ -100,6 +102,16 @@
 	untrackedCache = true
 
 	editor = code --wait
+	pager = delta
+
+[interactive]
+	diffFilter = delta --color-only
+
+[delta]
+	navigate = true
+	side-by-side = true
+	line-numbers = true
+	syntax-theme = Solarized (dark)
 
 [color]
 
@@ -155,6 +167,7 @@
 
 	# Include summaries of merged commits in newly created merge commit messages
 	log = true
+	conflictstyle = zdiff3
 
 [pull]
 
@@ -198,11 +211,11 @@
 [rebase]
 	autosquash = true
 
-[includeIf "gitdir:~/"]
-	path = .gitconfig-personal
-
-[includeIf "gitdir:prosperity/"]
+[includeIf "gitdir:~/Projects/prosperity/"]
 	path = .gitconfig-prosperity
+
+[includeIf "gitdir:~/Projects/boennemann/"]
+	path = .gitconfig-personal
 
 [user]
   signingkey = ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCuJOsIXo54j4RZf+48gOgxv45VuOs7PG7c/eTXpT583z/4bsYIous8yv2BZnpvBieZaOLTc8UC/aurgKv2o/5W7PSuZhnui3Wit6g00veGy4tR4+rTQ4myF/AeSez4vQyDhm8FT/H9miK1DXc2JIDIGhgo7A/sKn+TXEJfy5YUtiEmQmcsgG6gHkeCNUtUoQau9qxj8INgZQmhgjGpdokcWXbKjIDxfrRcrcc7wp6zPqhyWTFyEriUu/LhAyE44lCbOO94qwTeuPEadpajdUDcKcYkZj+mdXd7Pqp/+ytaQ0zI01KrMpbDCulK38LLAmFjnFfUg4tMQ3sWhxzN399r

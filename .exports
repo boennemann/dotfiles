@@ -23,21 +23,19 @@ export HISTCONTROL='ignoreboth';
 export LANG='en_US.UTF-8';
 export LC_ALL='en_US.UTF-8';
 
-# Highlight section titles in manual pages.
-export LESS_TERMCAP_md="${yellow}";
-
-# Link Homebrew casks in `/Applications` rather than `~/Applications`
-export HOMEBREW_CASK_OPTS="--appdir=/Applications"
-
-# Don’t clear the screen after quitting a manual page.
-export MANPAGER='less -X';
 
 # Avoid issues with `gpg` as installed via Homebrew.
 # https://stackoverflow.com/a/42265848/96656
 export GPG_TTY=$(tty);
 
-export ANDROID_SDK_ROOT="/Users/boennemann/Library/Android/sdk"
-export ANDROID_HOME="/Users/boennemann/Library/Android/sdk"
+export ANDROID_SDK_ROOT="$HOME/Library/Android/sdk"
+export ANDROID_HOME="$HOME/Library/Android/sdk"
 
-# Hide the “default interactive shell is now zsh” warning on macOS.
-export BASH_SILENCE_DEPRECATION_WARNING=1
+# fzf configuration
+export FZF_DEFAULT_COMMAND='fd --type f --hidden --follow --exclude .git'
+export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
+export FZF_CTRL_T_OPTS="--preview 'bat --color=always --style=numbers --line-range=:500 {}'"
+export FZF_ALT_C_COMMAND='fd --type d --hidden --follow --exclude .git'
+
+# Use bat as manpager
+export MANPAGER="sh -c 'col -bx | bat -l man -p'"
