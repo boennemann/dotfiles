@@ -64,3 +64,13 @@ brew "ssh-copy-id"
 brew "tree"
 # Zopfli compression
 brew "zopfli"
+
+# --- JSON/YAML/HTTP tools ---
+# JSON processor (essential for API work)
+brew "jq"
+# YAML processor
+brew "yq"
+# HTTP client (nicer than curl for APIs)
+brew "httpie"
+# Image preview in terminal (useful for fzf previews)
+brew "chafa"

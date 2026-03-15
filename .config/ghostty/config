@@ -13,3 +13,22 @@ scrollback-limit = 10000000
 
 # Option key sends normal characters (matching iTerm2)
 macos-option-as-alt = false
+
+# Window management
+window-padding-x = 4
+window-padding-y = 4
+window-decoration = true
+
+# Cursor
+cursor-style = block
+cursor-style-blink = false
+
+# Copy behavior
+copy-on-select = clipboard
+clipboard-paste-protection = false
+
+# Shell integration
+shell-integration = bash
+
+# Don't confirm before closing a tab/window with running processes
+confirm-close-surface = false

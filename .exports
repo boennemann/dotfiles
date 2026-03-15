@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
-# Make vscode the default editor.
-export EDITOR='code';
+# Make Cursor the default editor.
+export EDITOR='cursor';
 
 # Enable persistent REPL history for `node`.
 export NODE_REPL_HISTORY=~/.node_history;
