@@ -1,3 +1,7 @@
+# Homebrew (Apple Silicon): put brew + its bins on PATH.
+# Needed for bash login shells; zsh gets this via ~/.zprofile.
+eval "$(/opt/homebrew/bin/brew shellenv)"
+
 ANDROID_HOME="$HOME/Library/Android/sdk"
 
 export PATH=${PATH}:${ANDROID_HOME}/tools
