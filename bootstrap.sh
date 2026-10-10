@@ -88,9 +88,11 @@ changes=()
 record_conflict() {
 	local candidate="$1"
 	local existing
-	for existing in "${conflicts[@]}"; do
-		[[ "${existing}" == "${candidate}" ]] && return 0
-	done
+	if ((${#conflicts[@]} > 0)); then
+		for existing in "${conflicts[@]}"; do
+			[[ "${existing}" == "${candidate}" ]] && return 0
+		done
+	fi
 	conflicts+=("${candidate}")
 }
 
@@ -139,15 +141,17 @@ for relative_path in "${changes[@]}"; do
 		printf '  link           %s\n' "${relative_path}"
 	fi
 done
-for relative_path in "${conflicts[@]}"; do
-	if [[ ! " ${changes[*]} " == *" ${relative_path} "* ]]; then
-		if [[ "${backup_conflicts}" == true ]]; then
-			printf '  backup parent  %s\n' "${relative_path}"
-		else
-			printf '  blocked parent %s\n' "${relative_path}"
+if ((${#conflicts[@]} > 0)); then
+	for relative_path in "${conflicts[@]}"; do
+		if [[ ! " ${changes[*]} " == *" ${relative_path} "* ]]; then
+			if [[ "${backup_conflicts}" == true ]]; then
+				printf '  backup parent  %s\n' "${relative_path}"
+			else
+				printf '  blocked parent %s\n' "${relative_path}"
+			fi
 		fi
-	fi
-done
+	done
+fi
 
 if ((${#conflicts[@]} > 0)) && [[ "${backup_conflicts}" == false ]]; then
 	echo "ERROR: Conflicts found. Re-run with --backup to preserve and replace them." >&2
@@ -189,12 +193,16 @@ ensure_target_parent() {
 		cursor="$(dirname -- "${cursor}")"
 	done
 	mkdir -p -- "${parent_path}"
-	for cursor in "${missing_dirs[@]}"; do
-		for existing in "${created_dirs[@]}"; do
-			[[ "${existing}" == "${cursor}" ]] && continue 2
+	if ((${#missing_dirs[@]} > 0)); then
+		for cursor in "${missing_dirs[@]}"; do
+			if ((${#created_dirs[@]} > 0)); then
+				for existing in "${created_dirs[@]}"; do
+					[[ "${existing}" == "${cursor}" ]] && continue 2
+				done
+			fi
+			created_dirs+=("${cursor}")
 		done
-		created_dirs+=("${cursor}")
-	done
+	fi
 }
 
 rollback() {
@@ -222,14 +230,16 @@ rollback() {
 }
 trap rollback ERR INT TERM
 
-for relative_path in "${conflicts[@]}"; do
-	target_path="${target_home}/${relative_path}"
-	backup_path="${backup_root}/${relative_path}"
-	mkdir -p -- "$(dirname -- "${backup_path}")"
-	mv -- "${target_path}" "${backup_path}"
-	backed_up_targets+=("${target_path}")
-	backup_paths+=("${backup_path}")
-done
+if ((${#conflicts[@]} > 0)); then
+	for relative_path in "${conflicts[@]}"; do
+		target_path="${target_home}/${relative_path}"
+		backup_path="${backup_root}/${relative_path}"
+		mkdir -p -- "$(dirname -- "${backup_path}")"
+		mv -- "${target_path}" "${backup_path}"
+		backed_up_targets+=("${target_path}")
+		backup_paths+=("${backup_path}")
+	done
+fi
 
 for relative_path in "${changes[@]}"; do
 	source_path="${repo_root}/${relative_path}"
