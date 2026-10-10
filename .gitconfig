@@ -22,7 +22,7 @@
 	ca = !git add ':(exclude,attr:builtin_objectmode=160000)' && git commit -av
 
 	# Switch to a branch, creating it if necessary.
-	go = "!f() { git checkout -b \"$1\" 2> /dev/null || git checkout \"$1\"; }; f"
+	go = "!f() { git switch \"$1\" 2>/dev/null || git switch -c \"$1\"; }; f"
 
 	# Show verbose output about tags, branches or remotes
 	tags = tag -l
@@ -81,7 +81,7 @@
 [core]
 
 	# Use custom `.gitignore` and `.gitattributes`.
-	excludesfile = ~/.gitignore
+	excludesfile = ~/.config/git/ignore
 	attributesfile = ~/.gitattributes
 
 	# Treat spaces before tabs and all kinds of trailing whitespace as an error.
@@ -95,7 +95,7 @@
 
 	# Prevent showing files whose names contain non-ASCII symbols as unversioned.
 	# http://michael-kuehnel.de/git/2014/11/21/git-mac-osx-and-german-umlaute.html
-	precomposeunicode = false
+	precomposeunicode = true
 
 	# Speed up commands involving untracked files such as `git status`.
 	# https://git-scm.com/docs/git-update-index#_untracked_cache
@@ -149,7 +149,7 @@
 [help]
 
 	# Automatically correct and execute mistyped commands.
-	autocorrect = 1
+	autocorrect = prompt
 
 [merge]
 
@@ -168,31 +168,30 @@
 	# Make `git push` push relevant annotated tags when pushing branches out.
 	followTags = true
 
+[init]
+	defaultBranch = main
+
 # URL shorthands
 
-[url "git@github.com:"]
-
-	insteadOf = "gh:"
-	pushInsteadOf = "github:"
-	pushInsteadOf = "git://github.com/"
-
-[url "git://github.com/"]
-
+[url "https://github.com/"]
 	insteadOf = "github:"
+	insteadOf = "git://github.com/"
+
+[url "git@github.com:"]
+	insteadOf = "gh:"
+	pushInsteadOf = "https://github.com/"
+
+[url "https://gist.github.com/"]
+	insteadOf = "gist:"
+	insteadOf = "git://gist.github.com/"
 
 [url "git@gist.github.com:"]
-
 	insteadOf = "gst:"
-	pushInsteadOf = "gist:"
-	pushInsteadOf = "git://gist.github.com/"
-
-[url "git://gist.github.com/"]
-
-	insteadOf = "gist:"
+	pushInsteadOf = "https://gist.github.com/"
 
 [user]
 	name = "Stephan Bönnemann-Walenta"
-  signingkey = ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCuJOsIXo54j4RZf+48gOgxv45VuOs7PG7c/eTXpT583z/4bsYIous8yv2BZnpvBieZaOLTc8UC/aurgKv2o/5W7PSuZhnui3Wit6g00veGy4tR4+rTQ4myF/AeSez4vQyDhm8FT/H9miK1DXc2JIDIGhgo7A/sKn+TXEJfy5YUtiEmQmcsgG6gHkeCNUtUoQau9qxj8INgZQmhgjGpdokcWXbKjIDxfrRcrcc7wp6zPqhyWTFyEriUu/LhAyE44lCbOO94qwTeuPEadpajdUDcKcYkZj+mdXd7Pqp/+ytaQ0zI01KrMpbDCulK38LLAmFjnFfUg4tMQ3sWhxzN399r
+	signingkey = ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCuJOsIXo54j4RZf+48gOgxv45VuOs7PG7c/eTXpT583z/4bsYIous8yv2BZnpvBieZaOLTc8UC/aurgKv2o/5W7PSuZhnui3Wit6g00veGy4tR4+rTQ4myF/AeSez4vQyDhm8FT/H9miK1DXc2JIDIGhgo7A/sKn+TXEJfy5YUtiEmQmcsgG6gHkeCNUtUoQau9qxj8INgZQmhgjGpdokcWXbKjIDxfrRcrcc7wp6zPqhyWTFyEriUu/LhAyE44lCbOO94qwTeuPEadpajdUDcKcYkZj+mdXd7Pqp/+ytaQ0zI01KrMpbDCulK38LLAmFjnFfUg4tMQ3sWhxzN399r
 
 [credential]
 	helper = osxkeychain
@@ -207,10 +206,10 @@
 	path = .gitconfig-personal
 
 [gpg]
-  format = ssh
+	format = ssh
 
 [gpg "ssh"]
-  program = "/Applications/1Password.app/Contents/MacOS/op-ssh-sign"
+	program = "/Applications/1Password.app/Contents/MacOS/op-ssh-sign"
 
 [commit]
-  gpgsign = true
+	gpgsign = true

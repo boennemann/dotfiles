@@ -6,7 +6,7 @@ font-family = JetBrains Mono
 font-size = 13
 
 # Color scheme - Solarized Dark
-theme = Solarized Dark
+theme = iTerm2 Solarized Dark
 
 # Scrollback - large buffer (iTerm2 had unlimited)
 scrollback-limit = 10000000
@@ -25,7 +25,7 @@ cursor-style-blink = false
 
 # Copy behavior
 copy-on-select = clipboard
-clipboard-paste-protection = false
+clipboard-paste-protection = true
 
 # Shell integration
 shell-integration = bash

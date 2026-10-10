@@ -1,62 +1,62 @@
-# Add `~/bin` to the `$PATH`
-export PATH="$HOME/bin:$PATH";
+# shellcheck shell=bash
 
-# Load the shell dotfiles, and then some:
-# * ~/.path can be used to extend `$PATH`.
-# * ~/.extra can be used for other settings you don’t want to commit.
-for file in ~/.{path,exports,aliases,functions,extra}; do
-	[ -r "$file" ] && [ -f "$file" ] && source "$file";
-done;
-unset file;
+# Load environment and shell helpers. Machine-local additions belong in
+# ~/.extra.local, which is deliberately not managed by this repository.
+for file in "${HOME}"/.{path,exports,aliases,functions} "${HOME}/.extra.local"; do
+	if [[ -f "${file}" && -r "${file}" ]]; then
+		# shellcheck source=/dev/null
+		source "${file}"
+	fi
+done
+unset file
 
-# Case-insensitive globbing (used in pathname expansion)
-shopt -s nocaseglob;
+[[ $- == *i* ]] || return 0
 
-# Append to the Bash history file, rather than overwriting it
-shopt -s histappend;
-
-# Autocorrect typos in path names when using `cd`
-shopt -s cdspell;
-
-# Enable some Bash 4 features when possible:
-# * `autocd`, e.g. `**/qux` will enter `./foo/bar/baz/qux`
-# * Recursive globbing, e.g. `echo **/*.txt`
+shopt -s nocaseglob histappend cdspell
 for option in autocd globstar; do
-	shopt -s "$option" 2> /dev/null;
-done;
+	shopt -s "${option}" 2>/dev/null || true
+done
+unset option
 
-# Add tab completion for many Bash commands
-if which brew &> /dev/null && [ -r "$(brew --prefix)/etc/profile.d/bash_completion.sh" ]; then
-	# Ensure existing Homebrew v1 completions continue to work
-	export BASH_COMPLETION_COMPAT_DIR="$(brew --prefix)/etc/bash_completion.d";
-	source "$(brew --prefix)/etc/profile.d/bash_completion.sh";
-elif [ -f /etc/bash_completion ]; then
-	source /etc/bash_completion;
-fi;
+# Bash completion from Homebrew, with a system fallback.
+if command -v brew >/dev/null 2>&1; then
+	brew_prefix="$(brew --prefix)"
+	completion_script="${brew_prefix}/etc/profile.d/bash_completion.sh"
+	if [[ -r "${completion_script}" ]]; then
+		export BASH_COMPLETION_COMPAT_DIR="${brew_prefix}/etc/bash_completion.d"
+		# shellcheck source=/dev/null
+		source "${completion_script}"
+	fi
+	unset brew_prefix completion_script
+elif [[ -r /etc/bash_completion ]]; then
+	# shellcheck source=/dev/null
+	source /etc/bash_completion
+fi
 
-# Enable tab completion for `g` by marking it as an alias for `git`
-if type _git &> /dev/null; then
-	complete -o default -o nospace -F _git g;
-fi;
+if declare -F _git >/dev/null; then
+	complete -o default -o nospace -F _git g
+fi
 
-# Add tab completion for SSH hostnames based on ~/.ssh/config, ignoring wildcards
-[ -e "$HOME/.ssh/config" ] && complete -o "default" -o "nospace" -W "$(grep "^Host" ~/.ssh/config | grep -v "[?*]" | cut -d " " -f2- | tr ' ' '\n')" scp sftp ssh;
+if [[ -r "${HOME}/.ssh/config" ]]; then
+	ssh_hosts="$(awk '/^Host / { for (i = 2; i <= NF; i++) if ($i !~ /[?*]/) print $i }' "${HOME}/.ssh/config")"
+	complete -o default -o nospace -W "${ssh_hosts}" scp sftp ssh
+	unset ssh_hosts
+fi
 
-# Add tab completion for `defaults read|write NSGlobalDomain`
-# You could just use `-g` instead, but I like being explicit
-complete -W "NSGlobalDomain" defaults;
+complete -W "NSGlobalDomain" defaults
+complete -o nospace -W "Calendar Contacts Dock Finder Ghostty Mail Safari SystemUIServer" killall
 
-# Add `killall` tab completion for common apps
-complete -o "nospace" -W "Contacts Calendar Dock Finder Mail Safari iTunes SystemUIServer Terminal Ghostty" killall;
+command -v starship >/dev/null 2>&1 && eval "$(starship init bash)"
+command -v fzf >/dev/null 2>&1 && eval "$(fzf --bash)"
+command -v zoxide >/dev/null 2>&1 && eval "$(zoxide init bash)"
+command -v direnv >/dev/null 2>&1 && eval "$(direnv hook bash)"
 
-# Starship prompt (replaces .bash_prompt)
-eval "$(starship init bash)"
-
-# fzf keybindings and completion
-eval "$(fzf --bash)"
-
-# zoxide (smart cd)
-eval "$(zoxide init bash)"
-
-# direnv (per-directory env)
-eval "$(direnv hook bash)"
+# Emit OSC 7 so terminal emulators can inherit the current working directory.
+__osc7_cwd() {
+	# shellcheck disable=SC1003
+	printf '\e]7;file://%s%s\e\\' "${HOSTNAME:-localhost}" "${PWD}"
+}
+case ";${PROMPT_COMMAND:-};" in
+*';__osc7_cwd;'*) ;;
+*) PROMPT_COMMAND="${PROMPT_COMMAND:+${PROMPT_COMMAND};}__osc7_cwd" ;;
+esac

@@ -1,76 +1,130 @@
-# Brewfile - Homebrew bundle for dotfiles
-# Install with: brew bundle --file=Brewfile
+# Homebrew workstation baseline for Apple Silicon macOS.
+# Install with: brew bundle install --file=Brewfile
 
-# --- Core GNU utilities and shell ---
-# GNU core utilities (macOS ones are outdated)
-brew "coreutils"
-# Collection of useful tools like `sponge`
-brew "moreutils"
-# GNU `find`, `locate`, `updatedb`, and `xargs`
-brew "findutils"
-# GNU `sed`, replacing the built-in
-brew "gnu-sed"
-# Modern version of Bash
+tap "chmouel/lazyworktree", "https://github.com/chmouel/lazyworktree"
+
+# Requested command-line tools
+brew "act"
+brew "actionlint"
+brew "apktool"
 brew "bash"
 brew "bash-completion@2"
-
-# --- Modern CLI tools ---
-# Fuzzy finder
-brew "fzf"
-# Better grep (replaces ack)
-brew "ripgrep"
-# Better find
-brew "fd"
-# Better cat with syntax highlighting
 brew "bat"
-# Modern ls replacement
-brew "eza"
-# Better git diffs
-brew "git-delta"
-# Smarter cd
-brew "zoxide"
-# Cross-shell prompt
-brew "starship"
-# Environment switcher for projects
+brew "biome"
+brew "ccache"
+brew "cliclick"
+brew "cmake"
+brew "container"
+brew "coreutils"
+brew "dfu-util"
 brew "direnv"
-
-# --- Development tools ---
-brew "git"
-brew "git-lfs"
-# GitHub CLI (replaces hub)
+brew "dnsmasq"
+brew "eza"
+brew "fd"
+brew "ffmpeg"
+brew "findutils"
+brew "fzf"
 brew "gh"
-# GnuPG for PGP-signing commits
-brew "gnupg"
-brew "vim"
-brew "grep"
-brew "openssh"
-brew "php"
-# GNU Multiple Precision Arithmetic Library
+brew "ghostscript"
+brew "git"
+brew "git-absorb"
+brew "git-delta"
+brew "git-lfs"
 brew "gmp"
-# `wget` with IRI support
-brew "wget"
-
-# --- Other useful utilities ---
-# Ghostscript
-brew "gs"
+brew "gnu-sed"
+brew "gnupg"
+brew "gnutls"
+brew "go"
+brew "grep"
+brew "himalaya"
+brew "hub"
 brew "imagemagick"
-brew "p7zip"
-# Parallel gzip
-brew "pigz"
-# Pipe viewer for monitoring data through a pipeline
-brew "pv"
-brew "rename"
-brew "ssh-copy-id"
-brew "tree"
-# Zopfli compression
-brew "zopfli"
-
-# --- JSON/YAML/HTTP tools ---
-# JSON processor (essential for API work)
+brew "jadx"
 brew "jq"
-# YAML processor
-brew "yq"
-# HTTP client (nicer than curl for APIs)
-brew "httpie"
-# Image preview in terminal (useful for fzf previews)
-brew "chafa"
+brew "just"
+brew "mkcert"
+brew "moreutils"
+brew "mosquitto"
+brew "ninja"
+brew "nmap"
+brew "nss"
+brew "openai-whisper"
+brew "openjdk@17"
+brew "openssh"
+brew "oxipng"
+brew "p7zip"
+brew "pdftilecut"
+brew "php"
+brew "pigz"
+brew "poppler"
+brew "postgresql@16"
+brew "potrace"
+brew "pv"
+brew "railway"
+brew "rbenv"
+brew "redis"
+brew "rename"
+brew "ripgrep"
+brew "ruby-build"
+brew "scorecard"
+brew "screen"
+brew "sdl2-compat"
+brew "shellcheck"
+brew "shfmt"
+brew "sox"
+brew "ssh-copy-id"
+brew "starship"
+brew "summarize"
+brew "swaks"
+brew "tmux"
+brew "trash-cli"
+brew "tree"
+brew "uv"
+brew "vim"
+brew "wget"
+brew "yt-dlp"
+brew "zig"
+brew "zizmor"
+brew "zopfli"
+brew "zoxide"
+
+# Desktop applications and fonts
+cask "1password"
+cask "1password-cli"
+cask "airtable"
+cask "android-commandlinetools"
+cask "android-studio"
+cask "appcleaner"
+cask "arq"
+cask "basictex"
+cask "charles"
+cask "cmux"
+cask "copilot-cli"
+cask "cursor"
+cask "deskpad"
+cask "docker-desktop"
+cask "figma"
+cask "firefox"
+cask "font-jetbrains-mono"
+cask "hammerspoon"
+cask "imageoptim"
+cask "inkscape"
+cask "keepingyouawake"
+cask "keyboard-cleaner"
+cask "keycastr"
+cask "lazyworktree"
+cask "medis"
+cask "meetingbar"
+cask "mitmproxy"
+cask "muzzle"
+cask "ngrok"
+cask "notion"
+cask "postico"
+cask "postman"
+cask "qcad"
+cask "signal"
+cask "sketch"
+cask "spotify"
+cask "visual-studio-code"
+cask "vlc"
+cask "zeplin"

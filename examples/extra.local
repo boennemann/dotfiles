@@ -1,0 +1,13 @@
+# shellcheck shell=bash
+# Optional, machine-local shell integrations.
+# Copy this file to ~/.extra.local and uncomment only what is installed.
+
+if [[ -s "${HOME}/.nvm/nvm.sh" ]]; then
+	# shellcheck source=/dev/null
+	source "${HOME}/.nvm/nvm.sh"
+	nvm use default >/dev/null
+fi
+
+if command -v rbenv >/dev/null 2>&1; then
+	eval "$(rbenv init - bash)"
+fi

@@ -1,19 +1,42 @@
-# Homebrew (Apple Silicon): put brew + its bins on PATH.
-# Needed for bash login shells; zsh gets this via ~/.zprofile.
-eval "$(/opt/homebrew/bin/brew shellenv)"
+# shellcheck shell=bash
 
-ANDROID_HOME="$HOME/Library/Android/sdk"
+path_prepend() {
+	[[ -d "$1" ]] || return 0
+	case ":${PATH}:" in
+	*":$1:"*) ;;
+	*) PATH="$1:${PATH}" ;;
+	esac
+}
 
-export PATH=${PATH}:${ANDROID_HOME}/tools
-export PATH=${PATH}:${ANDROID_HOME}/platform-tools
-export PATH="/usr/local/sbin:$PATH"
+path_append() {
+	[[ -d "$1" ]] || return 0
+	case ":${PATH}:" in
+	*":$1:"*) ;;
+	*) PATH="${PATH}:$1" ;;
+	esac
+}
 
-export GOPATH=$HOME/golang
-export GOROOT=/opt/homebrew/opt/go/libexec
-export PATH=$PATH:$GOPATH/bin
-export PATH=$PATH:$GOROOT/bin
-[ -d "$HOME/Projects/prosperity/whisper.cpp/build/bin" ] && export PATH="$PATH:$HOME/Projects/prosperity/whisper.cpp/build/bin"
-export BUN_INSTALL="$HOME/.bun"
-export PATH="$BUN_INSTALL/bin:$PATH"
-export PATH="/opt/homebrew/opt/postgresql@16/bin:$PATH"
-export PATH="$HOME/.local/bin:$PATH"
+if [[ -x /opt/homebrew/bin/brew ]]; then
+	eval "$(/opt/homebrew/bin/brew shellenv)"
+fi
+
+path_prepend "${HOME}/.local/bin"
+path_prepend "${HOME}/bin"
+path_prepend "/usr/local/sbin"
+
+export ANDROID_HOME="${HOME}/Library/Android/sdk"
+export ANDROID_SDK_ROOT="${ANDROID_HOME}"
+path_append "${ANDROID_HOME}/emulator"
+path_append "${ANDROID_HOME}/platform-tools"
+path_append "${ANDROID_HOME}/cmdline-tools/latest/bin"
+
+export GOPATH="${HOME}/golang"
+path_append "${GOPATH}/bin"
+
+export BUN_INSTALL="${HOME}/.bun"
+path_prepend "${BUN_INSTALL}/bin"
+path_prepend "/opt/homebrew/opt/postgresql@16/bin"
+path_append "${HOME}/Projects/prosperity/whisper.cpp/build/bin"
+
+export PATH
+unset -f path_prepend path_append

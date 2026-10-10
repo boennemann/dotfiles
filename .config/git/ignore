@@ -1,0 +1,14 @@
+# macOS metadata
+.DS_Store
+._*
+.Spotlight-V100
+.Trashes
+
+# Windows metadata
+Desktop.ini
+Thumbs.db
+
+# Common generated files
+*.py[cod]
+*~
+*.swp

@@ -1,145 +1,153 @@
 #!/usr/bin/env bash
 
-# Create a new directory and enter it
-function mkd() {
-	mkdir -p "$@" && cd "$_";
-}
-
-# Change working directory to the top-most Finder window location
-function cdf() { # short for `cdfinder`
-	cd "$(osascript -e 'tell app "Finder" to POSIX path of (insertion location as alias)')";
-}
-
-# Create a .tar.gz archive, using `zopfli`, `pigz` or `gzip` for compression
-function targz() {
-	local tmpFile="${@%/}.tar";
-	tar -cvf "${tmpFile}" --exclude=".DS_Store" "${@}" || return 1;
-
-	size=$(
-		stat -f"%z" "${tmpFile}" 2> /dev/null; # macOS `stat`
-		stat -c"%s" "${tmpFile}" 2> /dev/null;  # GNU `stat`
-	);
-
-	local cmd="";
-	if (( size < 52428800 )) && hash zopfli 2> /dev/null; then
-		# the .tar file is smaller than 50 MB and Zopfli is available; use it
-		cmd="zopfli";
-	else
-		if hash pigz 2> /dev/null; then
-			cmd="pigz";
-		else
-			cmd="gzip";
-		fi;
-	fi;
-
-	echo "Compressing .tar ($((size / 1000)) kB) using \`${cmd}\`…";
-	"${cmd}" -v "${tmpFile}" || return 1;
-	[ -f "${tmpFile}" ] && rm "${tmpFile}";
-
-	zippedSize=$(
-		stat -f"%z" "${tmpFile}.gz" 2> /dev/null; # macOS `stat`
-		stat -c"%s" "${tmpFile}.gz" 2> /dev/null; # GNU `stat`
-	);
-
-	echo "${tmpFile}.gz ($((zippedSize / 1000)) kB) created successfully.";
-}
-
-# Determine size of a file or total size of a directory
-function fs() {
-	if du -b /dev/null > /dev/null 2>&1; then
-		local arg=-sbh;
-	else
-		local arg=-sh;
+mkd() {
+	if (($# != 1)); then
+		echo "Usage: mkd DIRECTORY" >&2
+		return 2
 	fi
-	if [[ -n "$@" ]]; then
-		du $arg -- "$@";
-	else
-		du $arg .[^.]* ./*;
-	fi;
+	mkdir -p -- "$1" || return
+	cd -- "$1" || return
 }
 
-# Create a data URL from a file
-function dataurl() {
-	local mimeType=$(file -b --mime-type "$1");
-	if [[ $mimeType == text/* ]]; then
-		mimeType="${mimeType};charset=utf-8";
+cdf() {
+	local finder_path
+	finder_path="$(osascript -e 'tell app "Finder" to POSIX path of (insertion location as alias)')" || return
+	cd -- "${finder_path}" || return
+}
+
+targz() {
+	if (($# != 1)); then
+		echo "Usage: targz PATH" >&2
+		return 2
 	fi
-	echo "data:${mimeType};base64,$(openssl base64 -in "$1" | tr -d '\n')";
-}
+	local source_path="${1%/}"
+	local tar_path="${source_path}.tar"
+	local size command_name zipped_size
 
-# Start an HTTP server from a directory, optionally specifying the port
-function server() {
-	local port="${1:-8000}";
-	sleep 1 && open "http://localhost:${port}/" &
-	python3 -m http.server "$port";
-}
-
-# Compare original and gzipped file size
-function gz() {
-	local origsize=$(wc -c < "$1");
-	local gzipsize=$(gzip -c "$1" | wc -c);
-	local ratio=$(echo "$gzipsize * 100 / $origsize" | bc -l);
-	printf "orig: %d bytes\n" "$origsize";
-	printf "gzip: %d bytes (%2.2f%%)\n" "$gzipsize" "$ratio";
-}
-
-# Run `dig` and display the most useful info
-function digga() {
-	dig +nocmd "$1" any +multiline +noall +answer;
-}
-
-# Show all the names (CNs and SANs) listed in the SSL certificate
-# for a given domain
-function getcertnames() {
-	if [ -z "${1}" ]; then
-		echo "ERROR: No domain specified.";
-		return 1;
-	fi;
-
-	local domain="${1}";
-	echo "Testing ${domain}…";
-	echo ""; # newline
-
-	local tmp=$(echo -e "GET / HTTP/1.0\nEOT" \
-		| openssl s_client -connect "${domain}:443" -servername "${domain}" 2>&1);
-
-	if [[ "${tmp}" = *"-----BEGIN CERTIFICATE-----"* ]]; then
-		local certText=$(echo "${tmp}" \
-			| openssl x509 -text -certopt "no_aux, no_header, no_issuer, no_pubkey, \
-			no_serial, no_sigdump, no_signame, no_validity, no_version");
-		echo "Common Name:";
-		echo ""; # newline
-		echo "${certText}" | grep "Subject:" | sed -e "s/^.*CN=//" | sed -e "s/\/emailAddress=.*//";
-		echo ""; # newline
-		echo "Subject Alternative Name(s):";
-		echo ""; # newline
-		echo "${certText}" | grep -A 1 "Subject Alternative Name:" \
-			| sed -e "2s/DNS://g" -e "s/ //g" | tr "," "\n" | tail -n +2;
-		return 0;
+	tar -cvf "${tar_path}" --exclude=".DS_Store" -- "${source_path}" || return
+	if size="$(stat -f "%z" "${tar_path}" 2>/dev/null)"; then
+		:
 	else
-		echo "ERROR: Certificate not found.";
-		return 1;
-	fi;
+		size="$(stat -c "%s" "${tar_path}")" || return
+	fi
+
+	if ((size < 52428800)) && command -v zopfli >/dev/null 2>&1; then
+		command_name="zopfli"
+	elif command -v pigz >/dev/null 2>&1; then
+		command_name="pigz"
+	else
+		command_name="gzip"
+	fi
+
+	printf 'Compressing %s (%d kB) with %s…\n' "${tar_path}" "$((size / 1000))" "${command_name}"
+	"${command_name}" -v "${tar_path}" || return
+	if zipped_size="$(stat -f "%z" "${tar_path}.gz" 2>/dev/null)"; then
+		:
+	else
+		zipped_size="$(stat -c "%s" "${tar_path}.gz")" || return
+	fi
+	printf '%s (%d kB) created successfully.\n' "${tar_path}.gz" "$((zipped_size / 1000))"
 }
 
-# Normalize `open` across Linux, macOS, and Windows.
-# This is needed to make the `o` function (see below) cross-platform.
-if [ ! $(uname -s) = 'Darwin' ]; then
-	if grep -q Microsoft /proc/version; then
-		# Ubuntu on Windows using the Linux subsystem
-		alias open='explorer.exe';
+fs() {
+	local arg="-sh"
+	du -b /dev/null >/dev/null 2>&1 && arg="-sbh"
+	if (($#)); then
+		du "${arg}" -- "$@"
 	else
-		alias open='xdg-open';
+		(
+			shopt -s dotglob nullglob
+			paths=(*)
+			((${#paths[@]})) && du "${arg}" -- "${paths[@]}"
+		)
+	fi
+}
+
+dataurl() {
+	if (($# != 1)); then
+		echo "Usage: dataurl FILE" >&2
+		return 2
+	fi
+	local mime_type
+	mime_type="$(file -b --mime-type -- "$1")" || return
+	[[ "${mime_type}" == text/* ]] && mime_type="${mime_type};charset=utf-8"
+	printf 'data:%s;base64,' "${mime_type}"
+	openssl base64 -A -in "$1"
+	printf '\n'
+}
+
+server() {
+	local port="${1:-8000}"
+	(sleep 1 && open "http://localhost:${port}/") &
+	python3 -m http.server "${port}"
+}
+
+gz() {
+	if (($# != 1)); then
+		echo "Usage: gz FILE" >&2
+		return 2
+	fi
+	local original_size gzip_size ratio
+	original_size="$(wc -c <"$1")" || return
+	gzip_size="$(gzip -c -- "$1" | wc -c)" || return
+	if ((original_size == 0)); then
+		ratio="0.00"
+	else
+		ratio="$(awk -v compressed="${gzip_size}" -v original="${original_size}" 'BEGIN { printf "%.2f", compressed * 100 / original }')"
+	fi
+	printf 'orig: %d bytes\ngzip: %d bytes (%s%%)\n' "${original_size}" "${gzip_size}" "${ratio}"
+}
+
+digga() {
+	if (($# != 1)); then
+		echo "Usage: digga DOMAIN" >&2
+		return 2
+	fi
+	dig +nocmd "$1" any +multiline +noall +answer
+}
+
+getcertnames() {
+	if (($# != 1)); then
+		echo "Usage: getcertnames DOMAIN" >&2
+		return 2
+	fi
+	openssl s_client -connect "$1:443" -servername "$1" </dev/null 2>/dev/null |
+		openssl x509 -noout -subject -ext subjectAltName
+}
+
+urlencode() {
+	if (($# != 1)); then
+		echo "Usage: urlencode STRING" >&2
+		return 2
+	fi
+	python3 -c 'import sys, urllib.parse; print(urllib.parse.quote_plus(sys.argv[1]))' "$1"
+}
+
+ifactive() {
+	local interface
+	for interface in $(ifconfig -l); do
+		if ifconfig "${interface}" | grep -q "status: active"; then
+			printf '%s\n' "${interface}"
+		fi
+	done
+}
+
+path() {
+	printf '%s\n' "${PATH//:/$'\n'}"
+}
+
+if [[ "$(uname -s)" != "Darwin" ]]; then
+	if grep -q Microsoft /proc/version 2>/dev/null; then
+		alias open="explorer.exe"
+	else
+		alias open="xdg-open"
 	fi
 fi
 
-# `o` with no arguments opens the current directory, otherwise opens the given
-# location
-function o() {
-	if [ $# -eq 0 ]; then
-		open .;
+o() {
+	if (($# == 0)); then
+		open .
 	else
-		open "$@";
-	fi;
+		open "$@"
+	fi
 }
-
